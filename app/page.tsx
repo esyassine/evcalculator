@@ -102,15 +102,15 @@ export default function ElectricCarCalculator() {
           <div className="flex justify-end mb-4">
             <ThemeToggle />
           </div>
-        <div className="grid lg:grid-cols-3 gap-6">
-          <Card className="lg:col-span-2">
+        <div className="grid lg:grid-cols-3 gap-8">
+          <Card className="lg:col-span-3">
             <CardHeader>
               <CardTitle>Calculadora EV</CardTitle>
               <CardDescription>Calcula tiempos de descarga, consumo eléctrico y costes de carga para tu coche eléctrico</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="batteryCapacity">Capacidad de la Batería (kWh)</Label>
                     <Input
@@ -135,49 +135,7 @@ export default function ElectricCarCalculator() {
                       ))}
                     </RadioGroup>
                   </div>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
-                    <Input
-                      id="averageConsumption"
-                      type="number"
-                      value={averageConsumption}
-                      onChange={(e) => setAverageConsumption(Number(e.target.value))}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="electricityPrice">Precio de la Electricidad (€/kWh)</Label>
-                    <Input
-                      id="electricityPrice"
-                      type="number"
-                      value={electricityPrice}
-                      onChange={(e) => setElectricityPrice(Number(e.target.value))}
-                    />
-                  </div>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
-                  <Input
-                    id="motorRange"
-                    type="number"
-                    value={motorRange}
-                    onChange={(e) => setMotorRange(Number(e.target.value))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="dailyDrivingDistance">Distancia de Conducción Diaria (km)</Label>
-                  <Input
-                    id="dailyDrivingDistance"
-                    type="number"
-                    value={dailyDrivingDistance}
-                    onChange={(e) => setDailyDrivingDistance(Number(e.target.value))}
-                  />
-                </div>
-                </div>
-                
-                <div>
                   <Label htmlFor="connectorType">Tipo de Conector</Label>
                   <Select value={connectorType} onValueChange={setConnectorType}>
                     <SelectTrigger>
@@ -191,6 +149,44 @@ export default function ElectricCarCalculator() {
                     </SelectContent>
                   </Select>
                 </div>
+                  
+                </div>
+                <div className="grid sm:grid-cols-3 gap-4">
+                 
+                  <div>
+                    <Label htmlFor="electricityPrice">Precio de la Electricidad (€/kWh)</Label>
+                    <Input
+                      id="electricityPrice"
+                      type="number"
+                      value={electricityPrice}
+                      onChange={(e) => setElectricityPrice(Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                  <Label htmlFor="dailyDrivingDistance">Distancia de Conducción Diaria (km)</Label>
+                  <Input
+                    id="dailyDrivingDistance"
+                    type="number"
+                    value={dailyDrivingDistance}
+                    onChange={(e) => setDailyDrivingDistance(Number(e.target.value))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
+                  <Input
+                    id="motorRange"
+                    type="number"
+                    value={motorRange}
+                    onChange={(e) => setMotorRange(Number(e.target.value))}
+                  />
+                </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+               
+                
+                </div>
+                
+               
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="charging-mode"
@@ -207,7 +203,7 @@ export default function ElectricCarCalculator() {
                 <Card className="mt-6">
                   <CardContent className="p-6">
                     <h3 className="text-lg font-semibold mb-4">Resultados del Cálculo</h3>
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <BatteryIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Tiempo de Descarga</span>
@@ -217,6 +213,12 @@ export default function ElectricCarCalculator() {
                         <ZapIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Tiempo de Carga</span>
                         <span className="text-2xl font-bold">{results.chargingTime.toFixed(2)} h</span>
+                      </div>
+
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <ClockIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Tiempo de Carga (0-80%)</span>
+                        <span className="text-2xl font-bold">{results.chargingTime80Percent.toFixed(2)} h</span>
                       </div>
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <ZapIcon className="w-8 h-8 mb-2 text-primary" />
@@ -248,11 +250,9 @@ export default function ElectricCarCalculator() {
                         <span className="text-sm text-muted-foreground">CO2 Ahorrado</span>
                         <span className="text-2xl font-bold">{results.co2Saved.toFixed(2)} kg</span>
                       </div>
-                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                        <ClockIcon className="w-8 h-8 mb-2 text-primary" />
-                        <span className="text-sm text-muted-foreground">Tiempo de Carga (0-80%)</span>
-                        <span className="text-2xl font-bold">{results.chargingTime80Percent.toFixed(2)} h</span>
-                      </div>
+                    
+
+
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Rango Diario Estimado</span>
@@ -265,7 +265,7 @@ export default function ElectricCarCalculator() {
             </CardContent>
           </Card>
 
-            <Card className="lg:row-span-2">
+          <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle>Información Adicional</CardTitle>
               </CardHeader>
