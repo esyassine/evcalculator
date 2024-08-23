@@ -70,7 +70,7 @@ export default function Component(props: any) {
           <div className="grid lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Calculadora de Coche Eléctrico</CardTitle>
+                <CardTitle>Calculadora EV</CardTitle>
                 <CardDescription>Calcula tiempos de descarga, consumo eléctrico y costes de carga para tu coche eléctrico</CardDescription>
               </CardHeader>
               <CardContent>

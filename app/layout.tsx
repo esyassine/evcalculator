@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { Toaster } from 'sonner';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from 'next-themes';
 
 import { Suspense } from 'react';
 import Page from "./page";
@@ -12,21 +13,25 @@ export const metadata: Metadata = {
   description: 'Calculadora de Coche Eléctrico',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en">
+    <html lang="es" suppressHydrationWarning>
       <body
         className={cn(
-          'bg-gray-100 font-sans antialiased dark:bg-black dark:text-white',
+          'min-h-screen bg-background font-sans antialiased',
           GeistSans.variable
         )}
       >
-        <Page />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Suspense fallback={<div>Cargando...</div>}>
+            <Page />
+          </Suspense>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
