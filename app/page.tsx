@@ -7,33 +7,58 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Moon, Sun, BatteryIcon, HomeIcon, ZapIcon, EuroIcon, CarIcon } from 'lucide-react'
-import {ThemeToggle} from "@/components/ui/Toggle"
-import {ThemeProvider} from "@/components/ui/Provider"
+import { ThemeToggle } from "@/components/ui/Toggle"
+import { ThemeProvider } from "@/components/ui/Provider"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function Component(props : any) {
+export default function Component(props: any) {
   const [batteryCapacity, setBatteryCapacity] = useState(49.2)
   const [chargingPower, setChargingPower] = useState(22)
   const [averageConsumption, setAverageConsumption] = useState(15.2)
   const [isHomeCharging, setIsHomeCharging] = useState(true)
   const [electricityPrice, setElectricityPrice] = useState(0.2)
   const [motorRange, setMotorRange] = useState(402)
-  const [results, setResults] = useState({ dischargeTime: 0, consumption: 0, chargeCost: 0, actualRange: 0 })
+  const [connectorType, setConnectorType] = useState("type2")
+  const [results, setResults] = useState({ dischargeTime: 0, chargingTime: 0, consumption: 0, chargeCost: 0, actualRange: 0 })
 
   const calculateResults = () => {
     const dischargeTime = batteryCapacity / averageConsumption
     const chargingTime = batteryCapacity / chargingPower
-    const consumption = batteryCapacity * (isHomeCharging ? 1 : 1.2)
+    let consumption = batteryCapacity * (isHomeCharging ? 1 : 1.2)
+    
+    // Ajustar la eficiencia según el tipo de conector
+    switch(connectorType) {
+      case "type2":
+        consumption *= 0.95; // 95% de eficiencia
+        break;
+      case "ccs":
+        consumption *= 0.92; // 92% de eficiencia
+        break;
+      case "chademo":
+        consumption *= 0.93; // 93% de eficiencia
+        break;
+      case "tesla":
+        consumption *= 0.96; // 96% de eficiencia
+        break;
+    }
+    
     const chargeCost = consumption * electricityPrice
     const actualRange = (batteryCapacity / averageConsumption) * 100
-    setResults({ dischargeTime, consumption, chargeCost, actualRange })
+    setResults({ dischargeTime, chargingTime, consumption, chargeCost, actualRange })
+  }
+
+  useEffect(() => {
+    calculateResults()
+  }, [batteryCapacity, chargingPower, averageConsumption, isHomeCharging, electricityPrice, motorRange, connectorType])
+
+  const handleChargingPowerChange = (value: string) => {
+    setChargingPower(Number(value))
   }
 
   const handleSwitchChange = (checked: boolean) => {
     setIsHomeCharging(checked)
-    calculateResults()
   }
-
-  console.log("props", props)
   
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -61,13 +86,19 @@ export default function Component(props : any) {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="chargingPower">Potencia de Carga (kW)</Label>
-                      <Input
-                        id="chargingPower"
-                        type="number"
-                        value={chargingPower}
-                        onChange={(e) => setChargingPower(Number(e.target.value))}
-                      />
+                      <Label>Potencia de Carga (kW)</Label>
+                      <RadioGroup
+                        value={chargingPower.toString()}
+                        onValueChange={handleChargingPowerChange}
+                        className="flex flex-wrap gap-2 mt-2"
+                      >
+                        {[2.2, 3.7, 7.4, 11, 22].map((power) => (
+                          <div key={power} className="flex items-center space-x-2">
+                            <RadioGroupItem value={power.toString()} id={`power-${power}`} />
+                            <Label htmlFor={`power-${power}`}>{power}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -90,6 +121,7 @@ export default function Component(props : any) {
                       />
                     </div>
                   </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
                     <Input
@@ -98,6 +130,21 @@ export default function Component(props : any) {
                       value={motorRange}
                       onChange={(e) => setMotorRange(Number(e.target.value))}
                     />
+                  </div>
+                  <div>
+                    <Label htmlFor="connectorType">Tipo de Conector</Label>
+                    <Select value={connectorType} onValueChange={setConnectorType}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona el tipo de conector" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="type2">Tipo 2 (Mennekes)</SelectItem>
+                        <SelectItem value="ccs">CCS (Combo)</SelectItem>
+                        <SelectItem value="chademo">CHAdeMO</SelectItem>
+                        <SelectItem value="tesla">Tesla</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Switch
@@ -115,11 +162,16 @@ export default function Component(props : any) {
                   <Card className="mt-6">
                     <CardContent className="p-6">
                       <h3 className="text-lg font-semibold mb-4">Resultados del Cálculo</h3>
-                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                           <BatteryIcon className="w-8 h-8 mb-2 text-primary" />
                           <span className="text-sm text-muted-foreground">Tiempo de Descarga</span>
                           <span className="text-2xl font-bold">{results.dischargeTime.toFixed(2)} h</span>
+                        </div>
+                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                          <ZapIcon className="w-8 h-8 mb-2 text-primary" />
+                          <span className="text-sm text-muted-foreground">Tiempo de Carga</span>
+                          <span className="text-2xl font-bold">{results.chargingTime.toFixed(2)} h</span>
                         </div>
                         <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                           <ZapIcon className="w-8 h-8 mb-2 text-primary" />
@@ -145,7 +197,7 @@ export default function Component(props : any) {
             
             <Card className="lg:row-span-2">
               <CardHeader>
-          
+                <CardTitle>Información Adicional</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -154,7 +206,7 @@ export default function Component(props : any) {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Potencia de Carga (kW)</h3>
-                  <p>Indica la velocidad a la que el coche puede recibir energía. Varía desde 3.7 kW en carga lenta doméstica hasta más de 250 kW en cargadores ultrarrápidos. Una mayor potencia de carga reduce el tiempo necesario para recargar la batería.</p>
+                  <p>Indica la velocidad a la que el coche puede recibir energía. Varía desde 2.2 kW en carga lenta doméstica hasta 22 kW en cargadores rápidos domésticos o públicos. Una mayor potencia de carga reduce el tiempo necesario para recargar la batería.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Consumo Promedio (kWh/100km)</h3>
@@ -166,11 +218,11 @@ export default function Component(props : any) {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Eficiencia de Carga</h3>
-                  <p>No toda la energía de la red llega a la batería debido a pérdidas en el proceso de carga. La eficiencia suele estar entre el 85% y 95%, siendo generalmente mayor en la carga lenta que en la rápida.</p>
+                  <p>No toda la energía de la red llega a la batería debido a pérdidas en el proceso de carga. La eficiencia varía según el tipo de conector, siendo generalmente mayor en la carga lenta que en la rápida.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Tipos de Conectores</h3>
-                  <p>Existen varios estándares: Tipo 2 (Mennekes) es común en Europa para carga lenta y semi-rápida, CCS para carga rápida en DC, CHAdeMO usado por algunos fabricantes asiáticos, y el conector propietario de Tesla.</p>
+                  <p>Existen varios estándares: Tipo 2 (Mennekes) es común en Europa para carga lenta y semi-rápida, CCS para carga rápida en DC, CHAdeMO usado por algunos fabricantes asiáticos, y el conector propietario de Tesla. Cada uno tiene diferentes niveles de eficiencia.</p>
                 </div>
               </CardContent>
             </Card>
