@@ -1,18 +1,19 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { Moon, Sun, BatteryIcon, HomeIcon, ZapIcon, EuroIcon, CarIcon } from 'lucide-react'
-import { ThemeToggle } from "@/components/ui/Toggle"
-import { ThemeProvider } from "@/components/ui/Provider"
+import { Moon, Sun, BatteryIcon, HomeIcon, ZapIcon, EuroIcon, CarIcon, LeafIcon, ClockIcon, CalendarIcon } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTheme } from "next-themes"
+import { ThemeToggle } from "@/components/ui/Toggle"
+import { ThemeProvider } from "@/components/ui/Provider"
 
-export default function Component(props: any) {
+export default function ElectricCarCalculator() {
   const [batteryCapacity, setBatteryCapacity] = useState(49.2)
   const [chargingPower, setChargingPower] = useState(22)
   const [averageConsumption, setAverageConsumption] = useState(15.2)
@@ -20,37 +21,67 @@ export default function Component(props: any) {
   const [electricityPrice, setElectricityPrice] = useState(0.2)
   const [motorRange, setMotorRange] = useState(402)
   const [connectorType, setConnectorType] = useState("type2")
-  const [results, setResults] = useState({ dischargeTime: 0, chargingTime: 0, consumption: 0, chargeCost: 0, actualRange: 0 })
+  const [dailyDrivingDistance, setDailyDrivingDistance] = useState(50)
+  const [results, setResults] = useState({
+    dischargeTime: 0,
+    chargingTime: 0,
+    consumption: 0,
+    chargeCost: 0,
+    actualRange: 0,
+    efficiency: 0,
+    costPer100km: 0,
+    co2Saved: 0,
+    chargingTime80Percent: 0,
+    dailyRangeEstimate: 0
+  })
+
+  const { theme, setTheme } = useTheme()
 
   const calculateResults = () => {
     const dischargeTime = batteryCapacity / averageConsumption
     const chargingTime = batteryCapacity / chargingPower
     let consumption = batteryCapacity * (isHomeCharging ? 1 : 1.2)
     
-    // Ajustar la eficiencia según el tipo de conector
     switch(connectorType) {
       case "type2":
-        consumption *= 0.95; // 95% de eficiencia
+        consumption *= 0.95;
         break;
       case "ccs":
-        consumption *= 0.92; // 92% de eficiencia
+        consumption *= 0.92;
         break;
       case "chademo":
-        consumption *= 0.93; // 93% de eficiencia
+        consumption *= 0.93;
         break;
       case "tesla":
-        consumption *= 0.96; // 96% de eficiencia
+        consumption *= 0.96;
         break;
     }
     
     const chargeCost = consumption * electricityPrice
     const actualRange = (batteryCapacity / averageConsumption) * 100
-    setResults({ dischargeTime, chargingTime, consumption, chargeCost, actualRange })
+    const efficiency = 100 / averageConsumption
+    const costPer100km = (averageConsumption * electricityPrice)
+    const co2Saved = (actualRange * 120) / 1000 // Asumiendo 120g CO2/km para un coche de combustión promedio
+    const chargingTime80Percent = (batteryCapacity * 0.8) / chargingPower
+    const dailyRangeEstimate = Math.min(dailyDrivingDistance, actualRange)
+
+    setResults({
+      dischargeTime,
+      chargingTime,
+      consumption,
+      chargeCost,
+      actualRange,
+      efficiency,
+      costPer100km,
+      co2Saved,
+      chargingTime80Percent,
+      dailyRangeEstimate
+    })
   }
 
   useEffect(() => {
     calculateResults()
-  }, [batteryCapacity, chargingPower, averageConsumption, isHomeCharging, electricityPrice, motorRange, connectorType])
+  }, [batteryCapacity, chargingPower, averageConsumption, isHomeCharging, electricityPrice, motorRange, connectorType, dailyDrivingDistance])
 
   const handleChargingPowerChange = (value: string) => {
     setChargingPower(Number(value))
@@ -58,6 +89,10 @@ export default function Component(props: any) {
 
   const handleSwitchChange = (checked: boolean) => {
     setIsHomeCharging(checked)
+  }
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
   }
   
   return (
@@ -67,134 +102,169 @@ export default function Component(props: any) {
           <div className="flex justify-end mb-4">
             <ThemeToggle />
           </div>
-          <div className="grid lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle>Calculadora EV</CardTitle>
-                <CardDescription>Calcula tiempos de descarga, consumo eléctrico y costes de carga para tu coche eléctrico</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="batteryCapacity">Capacidad de la Batería (kWh)</Label>
-                      <Input
-                        id="batteryCapacity"
-                        type="number"
-                        value={batteryCapacity}
-                        onChange={(e) => setBatteryCapacity(Number(e.target.value))}
-                      />
-                    </div>
-                    <div>
-                      <Label>Potencia de Carga (kW)</Label>
-                      <RadioGroup
-                        value={chargingPower.toString()}
-                        onValueChange={handleChargingPowerChange}
-                        className="flex flex-wrap gap-2 mt-2"
-                      >
-                        {[2.2, 3.7, 7.4, 11, 22].map((power) => (
-                          <div key={power} className="flex items-center space-x-2">
-                            <RadioGroupItem value={power.toString()} id={`power-${power}`} />
-                            <Label htmlFor={`power-${power}`}>{power}</Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
-                      <Input
-                        id="averageConsumption"
-                        type="number"
-                        value={averageConsumption}
-                        onChange={(e) => setAverageConsumption(Number(e.target.value))}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="electricityPrice">Precio de la Electricidad (€/kWh)</Label>
-                      <Input
-                        id="electricityPrice"
-                        type="number"
-                        value={electricityPrice}
-                        onChange={(e) => setElectricityPrice(Number(e.target.value))}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Calculadora EV</CardTitle>
+              <CardDescription>Calcula tiempos de descarga, consumo eléctrico y costes de carga para tu coche eléctrico</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
+                    <Label htmlFor="batteryCapacity">Capacidad de la Batería (kWh)</Label>
                     <Input
-                      id="motorRange"
+                      id="batteryCapacity"
                       type="number"
-                      value={motorRange}
-                      onChange={(e) => setMotorRange(Number(e.target.value))}
+                      value={batteryCapacity}
+                      onChange={(e) => setBatteryCapacity(Number(e.target.value))}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="connectorType">Tipo de Conector</Label>
-                    <Select value={connectorType} onValueChange={setConnectorType}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tipo de conector" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="type2">Tipo 2 (Mennekes)</SelectItem>
-                        <SelectItem value="ccs">CCS (Combo)</SelectItem>
-                        <SelectItem value="chademo">CHAdeMO</SelectItem>
-                        <SelectItem value="tesla">Tesla</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Potencia de Carga (kW)</Label>
+                    <RadioGroup
+                      value={chargingPower.toString()}
+                      onValueChange={handleChargingPowerChange}
+                      className="flex flex-wrap gap-2 mt-2"
+                    >
+                      {[2.2, 3.7, 7.4, 11, 22].map((power) => (
+                        <div key={power} className="flex items-center space-x-2">
+                          <RadioGroupItem value={power.toString()} id={`power-${power}`} />
+                          <Label htmlFor={`power-${power}`}>{power}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="charging-mode"
-                      checked={isHomeCharging}
-                      onCheckedChange={handleSwitchChange}
-                    />
-                    <Label htmlFor="charging-mode">Carga en Casa</Label>
-                    {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
-                  </div>
-                  <Button onClick={calculateResults}>Calcular</Button>
                 </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
+                    <Input
+                      id="averageConsumption"
+                      type="number"
+                      value={averageConsumption}
+                      onChange={(e) => setAverageConsumption(Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="electricityPrice">Precio de la Electricidad (€/kWh)</Label>
+                    <Input
+                      id="electricityPrice"
+                      type="number"
+                      value={electricityPrice}
+                      onChange={(e) => setElectricityPrice(Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
+                  <Input
+                    id="motorRange"
+                    type="number"
+                    value={motorRange}
+                    onChange={(e) => setMotorRange(Number(e.target.value))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="dailyDrivingDistance">Distancia de Conducción Diaria (km)</Label>
+                  <Input
+                    id="dailyDrivingDistance"
+                    type="number"
+                    value={dailyDrivingDistance}
+                    onChange={(e) => setDailyDrivingDistance(Number(e.target.value))}
+                  />
+                </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="connectorType">Tipo de Conector</Label>
+                  <Select value={connectorType} onValueChange={setConnectorType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona el tipo de conector" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="type2">Tipo 2 (Mennekes)</SelectItem>
+                      <SelectItem value="ccs">CCS (Combo)</SelectItem>
+                      <SelectItem value="chademo">CHAdeMO</SelectItem>
+                      <SelectItem value="tesla">Tesla</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="charging-mode"
+                    checked={isHomeCharging}
+                    onCheckedChange={handleSwitchChange}
+                  />
+                  <Label htmlFor="charging-mode">Carga en Casa</Label>
+                  {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
+                </div>
+                <Button onClick={calculateResults}>Calcular</Button>
+              </div>
 
-                {results.dischargeTime > 0 && (
-                  <Card className="mt-6">
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-4">Resultados del Cálculo</h3>
-                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                          <BatteryIcon className="w-8 h-8 mb-2 text-primary" />
-                          <span className="text-sm text-muted-foreground">Tiempo de Descarga</span>
-                          <span className="text-2xl font-bold">{results.dischargeTime.toFixed(2)} h</span>
-                        </div>
-                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                          <ZapIcon className="w-8 h-8 mb-2 text-primary" />
-                          <span className="text-sm text-muted-foreground">Tiempo de Carga</span>
-                          <span className="text-2xl font-bold">{results.chargingTime.toFixed(2)} h</span>
-                        </div>
-                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                          <ZapIcon className="w-8 h-8 mb-2 text-primary" />
-                          <span className="text-sm text-muted-foreground">Consumo Eléctrico</span>
-                          <span className="text-2xl font-bold">{results.consumption.toFixed(2)} kWh</span>
-                        </div>
-                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                          <EuroIcon className="w-8 h-8 mb-2 text-primary" />
-                          <span className="text-sm text-muted-foreground">Coste de Carga</span>
-                          <span className="text-2xl font-bold">{results.chargeCost.toFixed(2)} €</span>
-                        </div>
-                        <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                          <CarIcon className="w-8 h-8 mb-2 text-primary" />
-                          <span className="text-sm text-muted-foreground">Autonomía Real</span>
-                          <span className="text-2xl font-bold">{results.actualRange.toFixed(2)} km</span>
-                        </div>
+              {results.dischargeTime > 0 && (
+                <Card className="mt-6">
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Resultados del Cálculo</h3>
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <BatteryIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Tiempo de Descarga</span>
+                        <span className="text-2xl font-bold">{results.dischargeTime.toFixed(2)} h</span>
                       </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </CardContent>
-            </Card>
-            
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <ZapIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Tiempo de Carga</span>
+                        <span className="text-2xl font-bold">{results.chargingTime.toFixed(2)} h</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <ZapIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Consumo Eléctrico</span>
+                        <span className="text-2xl font-bold">{results.consumption.toFixed(2)} kWh</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <EuroIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Coste de Carga</span>
+                        <span className="text-2xl font-bold">{results.chargeCost.toFixed(2)} €</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <CarIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Autonomía Real</span>
+                        <span className="text-2xl font-bold">{results.actualRange.toFixed(2)} km</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <ZapIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Eficiencia</span>
+                        <span className="text-2xl font-bold">{results.efficiency.toFixed(2)} km/kWh</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <EuroIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Costo por 100 km</span>
+                        <span className="text-2xl font-bold">{results.costPer100km.toFixed(2)} €</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <LeafIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">CO2 Ahorrado</span>
+                        <span className="text-2xl font-bold">{results.co2Saved.toFixed(2)} kg</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <ClockIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Tiempo de Carga (0-80%)</span>
+                        <span className="text-2xl font-bold">{results.chargingTime80Percent.toFixed(2)} h</span>
+                      </div>
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Rango Diario Estimado</span>
+                        <span className="text-2xl font-bold">{results.dailyRangeEstimate.toFixed(2)} km</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </CardContent>
+          </Card>
+
             <Card className="lg:row-span-2">
               <CardHeader>
                 <CardTitle>Información Adicional</CardTitle>
