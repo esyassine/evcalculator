@@ -145,7 +145,7 @@ export default function Component(props : any) {
             
             <Card className="lg:row-span-2">
               <CardHeader>
-                <CardTitle>Características de los Coches Eléctricos</CardTitle>
+          
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
