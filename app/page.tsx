@@ -28,10 +28,10 @@ export default function Component(props : any) {
     setResults({ dischargeTime, consumption, chargeCost, actualRange })
   }
 
-  // Effect to recalculate results when any input changes
-  useEffect(() => {
+  const handleSwitchChange = (checked: boolean) => {
+    setIsHomeCharging(checked)
     calculateResults()
-  }, [batteryCapacity, chargingPower, averageConsumption, isHomeCharging, electricityPrice, motorRange])
+  }
 
   console.log("props", props)
   
@@ -103,11 +103,12 @@ export default function Component(props : any) {
                     <Switch
                       id="charging-mode"
                       checked={isHomeCharging}
-                      onCheckedChange={setIsHomeCharging}
+                      onCheckedChange={handleSwitchChange}
                     />
                     <Label htmlFor="charging-mode">Carga en Casa</Label>
                     {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
                   </div>
+                  <Button onClick={calculateResults}>Calcular</Button>
                 </div>
 
                 {results.dischargeTime > 0 && (
