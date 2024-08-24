@@ -108,7 +108,7 @@ export default function ElectricCarCalculator() {
             </TabsList>
             
             <TabsContent value="calculator">
-              <Card>
+              <Card className="bg-green-50 dark:bg-black">
                 <CardHeader>
                   <CardTitle>Parámetros del Vehículo Eléctrico</CardTitle>
                   <CardDescription>Ingrese los detalles de su vehículo eléctrico para calcular los costos y la eficiencia</CardDescription>
@@ -212,7 +212,7 @@ export default function ElectricCarCalculator() {
               </Card>
 
               {results.dischargeTime > 0 && (
-                <Card className="mt-8">
+                <Card className="mt-8 bg-blue-50 dark:bg-black">
                   <CardHeader>
                     <CardTitle>Resultados del Cálculo</CardTitle>
                     <CardDescription>Basado en los parámetros ingresados</CardDescription>
