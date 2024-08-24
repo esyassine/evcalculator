@@ -149,17 +149,10 @@ export default function ElectricCarCalculator() {
                     </SelectContent>
                   </Select>
                 </div>
+                  
                 </div>
                 <div className="grid sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
-                    <Input
-                      id="averageConsumption"
-                      type="number"
-                      value={averageConsumption}
-                      onChange={(e) => setAverageConsumption(Number(e.target.value))}
-                    />
-                  </div>
+                 
                   <div>
                     <Label htmlFor="electricityPrice">Precio de la Electricidad (€/kWh)</Label>
                     <Input
@@ -170,6 +163,15 @@ export default function ElectricCarCalculator() {
                     />
                   </div>
                   <div>
+                  <Label htmlFor="dailyDrivingDistance">Distancia de Conducción Diaria (km)</Label>
+                  <Input
+                    id="dailyDrivingDistance"
+                    type="number"
+                    value={dailyDrivingDistance}
+                    onChange={(e) => setDailyDrivingDistance(Number(e.target.value))}
+                  />
+                </div>
+                <div>
                   <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
                   <Input
                     id="motorRange"
@@ -181,10 +183,10 @@ export default function ElectricCarCalculator() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                
-              
+                
                 </div>
                 
-                
+               
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="charging-mode"
@@ -212,6 +214,7 @@ export default function ElectricCarCalculator() {
                         <span className="text-sm text-muted-foreground">Tiempo de Carga</span>
                         <span className="text-2xl font-bold">{results.chargingTime.toFixed(2)} h</span>
                       </div>
+
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <ClockIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Tiempo de Carga (0-80%)</span>
@@ -228,11 +231,6 @@ export default function ElectricCarCalculator() {
                         <span className="text-2xl font-bold">{results.chargeCost.toFixed(2)} €</span>
                       </div>
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
-                        <EuroIcon className="w-8 h-8 mb-2 text-primary" />
-                        <span className="text-sm text-muted-foreground">Costo por 100 km</span>
-                        <span className="text-2xl font-bold">{results.costPer100km.toFixed(2)} €</span>
-                      </div>
-                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <CarIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Autonomía Real</span>
                         <span className="text-2xl font-bold">{results.actualRange.toFixed(2)} km</span>
@@ -242,18 +240,24 @@ export default function ElectricCarCalculator() {
                         <span className="text-sm text-muted-foreground">Eficiencia</span>
                         <span className="text-2xl font-bold">{results.efficiency.toFixed(2)} km/kWh</span>
                       </div>
-                  
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                        <EuroIcon className="w-8 h-8 mb-2 text-primary" />
+                        <span className="text-sm text-muted-foreground">Costo por 100 km</span>
+                        <span className="text-2xl font-bold">{results.costPer100km.toFixed(2)} €</span>
+                      </div>
                       <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <LeafIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">CO2 Ahorrado</span>
                         <span className="text-2xl font-bold">{results.co2Saved.toFixed(2)} kg</span>
                       </div>
-                      
-                      {/* <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                    
+
+
+                      <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
                         <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
                         <span className="text-sm text-muted-foreground">Rango Diario Estimado</span>
                         <span className="text-2xl font-bold">{results.dailyRangeEstimate.toFixed(2)} km</span>
-                      </div> */}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
