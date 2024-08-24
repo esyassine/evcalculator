@@ -174,13 +174,15 @@ export default function ElectricCarCalculator() {
           </div>
           
           <Tabs defaultValue="calculator" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="calculator">Calculadora</TabsTrigger>
-              <TabsTrigger value="info">Información</TabsTrigger>
-              <TabsTrigger value="chargingPoints">Puntos de Recarga</TabsTrigger>
-              <TabsTrigger value="conectores">Conectores</TabsTrigger>
-            </TabsList>
-            
+          <TabsList className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-gray-400">
+          <div className="flex space-x-4">
+            <TabsTrigger value="calculator" className="min-w-[120px] text-center">Calculadora</TabsTrigger>
+            <TabsTrigger value="info" className="min-w-[120px] text-center">Información</TabsTrigger>
+            {/* <TabsTrigger value="chargingPoints" className="min-w-[120px] text-center">Puntos de Recarga</TabsTrigger> */}
+            <TabsTrigger value="conectores" className="min-w-[120px] text-center">Conectores</TabsTrigger>
+          </div>
+      </TabsList>
+            <br></br>
             <TabsContent value="calculator">
               <Card className="bg-green-50 dark:bg-black">
                 <CardHeader>
