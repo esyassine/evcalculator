@@ -13,6 +13,43 @@ import { useTheme } from "next-themes"
 import { ThemeToggle } from "@/components/ui/Toggle"
 import { ThemeProvider } from "@/components/ui/Provider"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
+import Image from 'next/image'
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+
+const googleMapsApiKey = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
+
+const mapContainerStyle = {
+  width: "100%",
+  height: "400px",
+};
+
+const center = {
+  lat: 40.4168,
+  lng: -3.7038,
+};
+
+const chargingPoints = [
+  { id: 1, lat: 40.407995, lng: -3.691906, name: "Estación de Atocha", points: 4 },
+  { id: 2, lat: 40.425827, lng: -3.690474, name: "Plaza de Colón", points: 6 },
+  { id: 3, lat: 40.478992, lng: -3.711717, name: "Centro Comercial La Vaguada", points: 8 },
+  { id: 4, lat: 40.470832, lng: -3.562511, name: "Aeropuerto Adolfo Suárez Madrid-Barajas", points: 10 },
+  { id: 5, lat: 40.467728, lng: -3.617686, name: "IFEMA", points: 12 },
+  { id: 6, lat: 40.416775, lng: -3.703790, name: "Puerta del Sol", points: 5 },
+  { id: 7, lat: 40.452073, lng: -3.686551, name: "Estadio Santiago Bernabéu", points: 7 },
+  { id: 8, lat: 40.437954, lng: -3.681540, name: "Torre Picasso", points: 4 },
+  { id: 9, lat: 40.415514, lng: -3.707186, name: "Plaza Mayor", points: 3 },
+  { id: 10, lat: 40.404303, lng: -3.691557, name: "Museo Reina Sofía", points: 4 },
+  { id: 11, lat: 40.433926, lng: -3.676200, name: "Azca", points: 6 },
+  { id: 12, lat: 40.403633, lng: -3.707784, name: "Calle de Toledo", points: 3 },
+  { id: 13, lat: 40.411171, lng: -3.684899, name: "Calle de Alcalá", points: 5 },
+  { id: 14, lat: 40.377162, lng: -3.636198, name: "Parque Lineal del Manzanares", points: 4 },
+  { id: 15, lat: 40.442583, lng: -3.677391, name: "Paseo de la Castellana", points: 9 },
+  { id: 16, lat: 40.453103, lng: -3.688143, name: "Cuatro Torres Business Area", points: 8 },
+  { id: 17, lat: 40.413702, lng: -3.692300, name: "Gran Vía", points: 6 },
+  { id: 18, lat: 40.383042, lng: -3.719676, name: "Casa de Campo", points: 7 },
+  { id: 19, lat: 40.423729, lng: -3.685649, name: "Calle Serrano", points: 5 },
+  { id: 20, lat: 40.418908, lng: -3.682249, name: "Círculo de Bellas Artes", points: 4 }
+];
 
 export default function ElectricCarCalculator() {
   const [batteryCapacity, setBatteryCapacity] = useState(49.2)
@@ -105,6 +142,7 @@ export default function ElectricCarCalculator() {
             <TabsList>
               <TabsTrigger value="calculator">Calculadora</TabsTrigger>
               <TabsTrigger value="info">Información</TabsTrigger>
+              <TabsTrigger value="chargingPoints">Puntos de Recarga</TabsTrigger>
             </TabsList>
             
             <TabsContent value="calculator">
@@ -213,11 +251,12 @@ export default function ElectricCarCalculator() {
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
-                      <ResultCard icon={<BatteryIcon />} title="Tiempo de Descarga" value={`${results.dischargeTime.toFixed(2)} h`} />
+
                       <ResultCard icon={<ZapIcon />} title="Tiempo de Carga (100%)" value={`${results.chargingTime.toFixed(2)} h`} />
                       <ResultCard icon={<ClockIcon />} title="Tiempo de Carga (0-80%)" value={`${results.chargingTime80Percent.toFixed(2)} h`} />
-                      <ResultCard icon={<ZapIcon />} title="Consumo Eléctrico" value={`${results.consumption.toFixed(2)} kWh`} />
                       <ResultCard icon={<EuroIcon />} title="Coste de Carga" value={`${results.chargeCost.toFixed(2)} €`} />
+                      <ResultCard icon={<ZapIcon />} title="Consumo Eléctrico" value={`${results.consumption.toFixed(2)} kWh`} />
+                      <ResultCard icon={<BatteryIcon />} title="Tiempo de Descarga" value={`${results.dischargeTime.toFixed(2)} h`} />
                       <ResultCard icon={<CarIcon />} title="Autonomía Real" value={`${results.actualRange.toFixed(2)} km`} />
                       <ResultCard icon={<ZapIcon />} title="Eficiencia" value={`${results.efficiency.toFixed(2)} km/kWh`} />
                       <ResultCard icon={<EuroIcon />} title="Costo por 100 km" value={`${results.costPer100km.toFixed(2)} €`} />
@@ -245,6 +284,38 @@ export default function ElectricCarCalculator() {
                 </CardContent>
               </Card>
             </TabsContent>
+            <TabsContent value="chargingPoints">
+      <Card>
+        <CardHeader>
+          <CardTitle>Puntos de Recarga en Madrid</CardTitle>
+          <CardDescription>Mapa de los puntos de recarga para vehículos eléctricos en Madrid</CardDescription>
+        </CardHeader>
+          <CardContent>
+            <LoadScript googleMapsApiKey={googleMapsApiKey}>
+              <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
+                {chargingPoints.map((point) => (
+                  <Marker
+                    key={point.id}
+                    position={{ lat: point.lat, lng: point.lng }}
+                    label={`${point.points} puntos`}
+                    title={point.name}
+                  />
+                ))}
+              </GoogleMap>
+            </LoadScript>
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Puntos de Recarga Destacados</h3>
+              <ul className="list-disc pl-5">
+                {chargingPoints.map((point) => (
+                  <li key={point.id}>
+                    {point.name} - {point.points} puntos de carga
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </CardContent>
+          </Card>
+          </TabsContent>
           </Tabs>
         </div>
       </div>
