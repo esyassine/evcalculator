@@ -15,6 +15,10 @@ import { ThemeProvider } from "@/components/ui/Provider"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import Image from 'next/image'
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import Tesla from "../public/img/tesla.png"
+import Tipo2 from "../public/img/Tipo2.png"
+import CCS from "../public/img/CCS.png"
+import CHAdeMO from "../public/img/CHAdeMO.png"
 
 const googleMapsApiKey = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
@@ -27,6 +31,37 @@ const center = {
   lat: 40.4168,
   lng: -3.7038,
 };
+
+const connectors = [
+  {
+    name: "Tipo 2 (Mennekes)",
+    image: Tipo2,
+    description: "Estándar europeo para carga en AC. Soporta carga monofásica y trifásica hasta 43 kW.",
+    pros: ["Ampliamente utilizado en Europa", "Permite carga rápida en AC"],
+    cons: ["No soporta carga ultra-rápida en DC"]
+  },
+  {
+    name: "CCS (Combo)",
+    image: CCS,
+    description: "Combina el conector Tipo 2 con pines adicionales para carga rápida en DC. Permite cargas de hasta 350 kW.",
+    pros: ["Soporta carga rápida y ultra-rápida", "Estándar europeo para nuevos vehículos"],
+    cons: ["Menos común en vehículos más antiguos"]
+  },
+  {
+    name: "CHAdeMO",
+    image: CHAdeMO,
+    description: "Estándar japonés para carga rápida en DC. Soporta cargas de hasta 62.5 kW.",
+    pros: ["Ampliamente utilizado en vehículos japoneses", "Permite carga bidireccional"],
+    cons: ["Menos común en nuevos vehículos europeos", "Limitado a 62.5 kW"]
+  },
+  {
+    name: "Tesla",
+    image: Tesla,
+    description: "Conector propietario de Tesla para carga en AC y DC. Permite cargas de hasta 250 kW en Superchargers V3.",
+    pros: ["Acceso a la red de Superchargers", "Diseño compacto"],
+    cons: ["Exclusivo para vehículos Tesla", "Requiere adaptador para usar otros cargadores"]
+  }
+]
 
 const chargingPoints = [
   { id: 1, lat: 40.407995, lng: -3.691906, name: "Estación de Atocha", points: 4 },
@@ -143,6 +178,7 @@ export default function ElectricCarCalculator() {
               <TabsTrigger value="calculator">Calculadora</TabsTrigger>
               <TabsTrigger value="info">Información</TabsTrigger>
               <TabsTrigger value="chargingPoints">Puntos de Recarga</TabsTrigger>
+              <TabsTrigger value="conectores">Conectores</TabsTrigger>
             </TabsList>
             
             <TabsContent value="calculator">
@@ -288,37 +324,90 @@ export default function ElectricCarCalculator() {
               </Card>
             </TabsContent>
             <TabsContent value="chargingPoints">
-      <Card>
-        <CardHeader>
-          <CardTitle>Puntos de Recarga en Madrid</CardTitle>
-          <CardDescription>Mapa de los puntos de recarga para vehículos eléctricos en Madrid</CardDescription>
-        </CardHeader>
-          <CardContent>
-            <LoadScript googleMapsApiKey={googleMapsApiKey}>
-              <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-                {chargingPoints.map((point) => (
-                  <Marker
-                    key={point.id}
-                    position={{ lat: point.lat, lng: point.lng }}
-                    label={`${point.points} puntos`}
-                    title={point.name}
-                  />
-                ))}
-              </GoogleMap>
-            </LoadScript>
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Puntos de Recarga Destacados</h3>
-              <ul className="list-disc pl-5">
-                {chargingPoints.map((point) => (
-                  <li key={point.id}>
-                    {point.name} - {point.points} puntos de carga
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </CardContent>
-          </Card>
-          </TabsContent>
+              <Card>
+            <CardHeader>
+              <CardTitle>Puntos de Recarga en Madrid</CardTitle>
+              <CardDescription>Mapa de los puntos de recarga para vehículos eléctricos en Madrid</CardDescription>
+            </CardHeader>
+              <CardContent>
+                <LoadScript googleMapsApiKey={googleMapsApiKey}>
+                  <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
+                    {chargingPoints.map((point) => (
+                      <Marker
+                        key={point.id}
+                        position={{ lat: point.lat, lng: point.lng }}
+                        label={`${point.points} puntos`}
+                        title={point.name}
+                      />
+                    ))}
+                  </GoogleMap>
+                </LoadScript>
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold mb-2">Puntos de Recarga Destacados</h3>
+                  <ul className="list-disc pl-5">
+                    {chargingPoints.map((point) => (
+                      <li key={point.id}>
+                        {point.name} - {point.points} puntos de carga
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="conectores">
+              <Card>
+            <CardHeader>
+              <CardTitle>Tipos de Bornes y Conectores para Coches Eléctricos</CardTitle>
+              <CardDescription>Conoce los principales tipos de conectores utilizados en la carga de vehículos eléctricos.</CardDescription>
+            </CardHeader>
+              <CardContent>
+              <div className="mt-10">
+                <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                  {connectors.map((connector) => (
+                    <Card key={connector.name} className="bg-card">
+                      <CardHeader>
+                        <CardTitle className="text-lg font-medium text-foreground">{connector.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex justify-center mb-4">
+                          <Image
+                            src={connector.image}
+                            alt={`Conector ${connector.name}`}
+                            width={200}
+                            height={200}
+                            className="rounded-lg"
+                          />
+                        </div>
+                        <CardDescription className="text-sm text-muted-foreground mb-4">
+                          {connector.description}
+                        </CardDescription>
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-medium text-foreground">Ventajas:</h4>
+                          <ul className="list-disc list-inside text-sm text-muted-foreground">
+                            {connector.pros.map((pro, index) => (
+                              <li key={index}>{pro}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="mt-2 space-y-2">
+                          <h4 className="text-sm font-medium text-foreground">Desventajas:</h4>
+                          <ul className="list-disc list-inside text-sm text-muted-foreground">
+                            {connector.cons.map((con, index) => (
+                              <li key={index}>{con}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              </CardContent>
+              </Card>
+            </TabsContent>
+            
           </Tabs>
         </div>
       </div>
