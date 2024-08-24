@@ -94,7 +94,7 @@ export default function ElectricCarCalculator() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-h-screen bg-background text-foreground p-2 md:p-8">
+      <div className="min-h-screen bg-background text-foreground p-4 md:p-8">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Calculadora EV</h1>
@@ -115,7 +115,7 @@ export default function ElectricCarCalculator() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="batteryCapacity">Capacidad de la Batería (kWh)</Label>
                         <Input
@@ -126,13 +126,16 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
+                       
+                      <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
                         <Input
                           id="motorRange"
                           type="number"
                           value={motorRange}
                           onChange={(e) => setMotorRange(Number(e.target.value))}
                         />
+
+
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
@@ -144,7 +147,7 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="connectorType">Tipo de Conector (borne)</Label>
+                        <Label htmlFor="connectorType">Tipo de Conector</Label>
                         <Select value={connectorType} onValueChange={setConnectorType}>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona el tipo de conector" />
@@ -176,7 +179,7 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Potencia de Carga (kW)</Label>
+                      <Label>Potencia de Carga (kW)</Label>
                         <RadioGroup
                           value={chargingPower.toString()}
                           onValueChange={handleChargingPowerChange}
@@ -189,17 +192,20 @@ export default function ElectricCarCalculator() {
                             </div>
                           ))}
                         </RadioGroup>
+
+                       
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Switch
-                          id="charging-mode"
-                          checked={isHomeCharging}
-                          onCheckedChange={handleSwitchChange}
-                        />
-                        <Label htmlFor="charging-mode">Carga en Casa</Label>
-                        {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
-                      </div>
+                      <Switch
+                        id="charging-mode"
+                        checked={isHomeCharging}
+                        onCheckedChange={handleSwitchChange}
+                      />
+                      <Label htmlFor="charging-mode">Carga en Casa</Label>
+                      {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
                     </div>
+                    </div>
+                   
                     <Button onClick={calculateResults} className="w-full sm:w-auto">Calcular</Button>
                   </div>
                 </CardContent>
@@ -212,7 +218,7 @@ export default function ElectricCarCalculator() {
                     <CardDescription>Basado en los parámetros ingresados</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                       <ResultCard icon={<BatteryIcon />} title="Tiempo de Descarga" value={`${results.dischargeTime.toFixed(2)} h`} />
                       <ResultCard icon={<ZapIcon />} title="Tiempo de Carga (100%)" value={`${results.chargingTime.toFixed(2)} h`} />
                       <ResultCard icon={<ClockIcon />} title="Tiempo de Carga (0-80%)" value={`${results.chargingTime80Percent.toFixed(2)} h`} />
@@ -252,7 +258,7 @@ export default function ElectricCarCalculator() {
   )
 }
 
-function ResultCard({ icon, title, value }: { icon: React.ReactNode; title: string; value: string }) {
+function ResultCard({ icon, title, value }: any) {
   return (
     <div className="bg-primary/10 rounded-lg p-4 flex flex-col items-center justify-center text-center">
       <div className="text-primary mb-2">{icon}</div>
@@ -262,7 +268,7 @@ function ResultCard({ icon, title, value }: { icon: React.ReactNode; title: stri
   )
 }
 
-function InfoSection({ title, content }: { title: string; content: string }) {
+function InfoSection({ title, content } : any) {
   return (
     <div>
       <h3 className="font-semibold mb-2">{title}</h3>
