@@ -131,7 +131,7 @@ export default function ElectricCarCalculator() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-h-screen bg-background text-foreground p-2 md:p-8">
+      <div className="min-h-screen bg-background text-foreground p-0 md:p-8">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Calculadora EV</h1>
@@ -182,7 +182,7 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="connectorType">Tipo de Conector (borne)</Label>
+                        <Label htmlFor="connectorType">Tipo de Conector (Tipos de cargadores)</Label>
                         <Select value={connectorType} onValueChange={setConnectorType}>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona el tipo de conector" />
@@ -201,6 +201,9 @@ export default function ElectricCarCalculator() {
                           id="electricityPrice"
                           type="number"
                           value={electricityPrice}
+                          step="0.1"
+                          min="0"
+                          max="0.9"
                           onChange={(e) => setElectricityPrice(Number(e.target.value))}
                         />
                       </div>
