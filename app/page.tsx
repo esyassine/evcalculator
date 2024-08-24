@@ -115,7 +115,7 @@ export default function ElectricCarCalculator() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="batteryCapacity">Capacidad de la Batería (kWh)</Label>
                         <Input
@@ -126,19 +126,16 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Potencia de Carga (kW)</Label>
-                        <RadioGroup
-                          value={chargingPower.toString()}
-                          onValueChange={handleChargingPowerChange}
-                          className="flex flex-wrap gap-2"
-                        >
-                          {[2.2, 3.7, 7.4, 11, 22].map((power) => (
-                            <div key={power} className="flex items-center space-x-2">
-                              <RadioGroupItem value={power.toString()} id={`power-${power}`} />
-                              <Label htmlFor={`power-${power}`}>{power}</Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
+                       
+                      <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
+                        <Input
+                          id="motorRange"
+                          type="number"
+                          value={motorRange}
+                          onChange={(e) => setMotorRange(Number(e.target.value))}
+                        />
+
+
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="averageConsumption">Consumo Promedio (kWh/100km)</Label>
@@ -182,16 +179,23 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="motorRange">Autonomía del Motor Eléctrico (km)</Label>
-                        <Input
-                          id="motorRange"
-                          type="number"
-                          value={motorRange}
-                          onChange={(e) => setMotorRange(Number(e.target.value))}
-                        />
+                      <Label>Potencia de Carga (kW)</Label>
+                        <RadioGroup
+                          value={chargingPower.toString()}
+                          onValueChange={handleChargingPowerChange}
+                          className="flex flex-wrap gap-2"
+                        >
+                          {[2.2, 3.7, 7.4, 11, 22].map((power) => (
+                            <div key={power} className="flex items-center space-x-2">
+                              <RadioGroupItem value={power.toString()} id={`power-${power}`} />
+                              <Label htmlFor={`power-${power}`}>{power}</Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+
+                       
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2">
                       <Switch
                         id="charging-mode"
                         checked={isHomeCharging}
@@ -200,6 +204,8 @@ export default function ElectricCarCalculator() {
                       <Label htmlFor="charging-mode">Carga en Casa</Label>
                       {isHomeCharging ? <HomeIcon className="ml-2" /> : <ZapIcon className="ml-2" />}
                     </div>
+                    </div>
+                   
                     <Button onClick={calculateResults} className="w-full sm:w-auto">Calcular</Button>
                   </div>
                 </CardContent>
