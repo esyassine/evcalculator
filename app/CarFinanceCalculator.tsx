@@ -237,7 +237,7 @@ export default function CarFinanceCalculator() {
   )
 }
 
-function ResultItem({ label, value, icon, tooltip }) {
+function ResultItem({ label, value, icon, tooltip } : any) {
   return (
     <TooltipProvider>
       <Tooltip>
