@@ -19,6 +19,7 @@ import Tesla from "../public/img/tesla.png"
 import Tipo2 from "../public/img/Tipo2.png"
 import CCS from "../public/img/CCS.png"
 import CHAdeMO from "../public/img/CHAdeMO.png"
+import CarFinanceCalculator from './CarFinanceCalculator'
 
 const googleMapsApiKey = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
@@ -176,12 +177,13 @@ export default function ElectricCarCalculator() {
           <Tabs defaultValue="calculator" className="space-y-4">
           <TabsList className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-gray-400">
           <div className="flex space-x-4">
-            <TabsTrigger value="calculator" className="min-w-[120px] text-center">Calculadora</TabsTrigger>
-            <TabsTrigger value="info" className="min-w-[120px] text-center">Información</TabsTrigger>
+            <TabsTrigger value="calculator" className="text-center">Calculadora</TabsTrigger>
+            <TabsTrigger value="info" className="text-center">Información</TabsTrigger>
             {/* <TabsTrigger value="chargingPoints" className="min-w-[120px] text-center">Puntos de Recarga</TabsTrigger> */}
-            <TabsTrigger value="conectores" className="min-w-[120px] text-center">Conectores</TabsTrigger>
+            <TabsTrigger value="conectores" className=" text-center">Conectores</TabsTrigger>
+            <TabsTrigger value="financiacion" className=" text-center">Financiación</TabsTrigger>
           </div>
-      </TabsList>
+          </TabsList>
             <br></br>
             <TabsContent value="calculator">
               <Card className="bg-green-50 dark:bg-black">
@@ -409,6 +411,15 @@ export default function ElectricCarCalculator() {
               </CardContent>
               </Card>
             </TabsContent>
+
+
+
+            <TabsContent value="financiacion">
+            
+              <CarFinanceCalculator />
+             
+            </TabsContent>
+
             
           </Tabs>
         </div>
