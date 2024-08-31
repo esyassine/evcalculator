@@ -248,7 +248,7 @@ export default function ElectricCarCalculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="dailyDrivingDistance">Distancia de Conducción Diaria (km)</Label>
+                        <Label htmlFor="dailyDrivingDistance">Dist. de Conducción Diaria (km)</Label>
                         <Input
                           id="dailyDrivingDistance"
                           type="number"
