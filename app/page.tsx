@@ -89,10 +89,10 @@ const chargingPoints = [
 
 export default function ElectricCarCalculator() {
   const [batteryCapacity, setBatteryCapacity] = useState(49.2)
-  const [chargingPower, setChargingPower] = useState(22)
+  const [chargingPower, setChargingPower] = useState(7.4)
   const [averageConsumption, setAverageConsumption] = useState(14.6)
   const [isHomeCharging, setIsHomeCharging] = useState(true)
-  const [electricityPrice, setElectricityPrice] = useState(0.2)
+  const [electricityPrice, setElectricityPrice] = useState(0.109420)
   const [motorRange, setMotorRange] = useState(402)
   const [connectorType, setConnectorType] = useState("type2")
   const [dailyDrivingDistance, setDailyDrivingDistance] = useState(50)
