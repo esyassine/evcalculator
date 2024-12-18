@@ -91,7 +91,7 @@ const chargingPoints = [
 
 export default function ElectricCarCalculator() {
   const [batteryCapacity, setBatteryCapacity] = useState(49.2)
-  const [chargingPower, setChargingPower] = useState(7.4)
+  const [chargingPower, setChargingPower] = useState(4.0)
   const [averageConsumption, setAverageConsumption] = useState(14.6)
   const [isHomeCharging, setIsHomeCharging] = useState(true)
   const [electricityPrice, setElectricityPrice] = useState(0.109420)
@@ -261,7 +261,7 @@ export default function ElectricCarCalculator() {
                       <div className="space-y-4">
                         <Label>Potencia de Carga (kW): {chargingPower.toFixed(1)}</Label>
                         <Slider
-                          min={4.0}
+                          min={1.0}
                           max={22}
                           step={0.1}
                           value={[chargingPower]}
@@ -269,7 +269,7 @@ export default function ElectricCarCalculator() {
                           className="w-full"
                         />
                         <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>2.2 kW</span>
+                          <span>4.0 kW</span>
                           <span>22 kW</span>
                         </div>
                       </div>
