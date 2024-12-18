@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { Slider } from "@/components/ui/slider"
 import { BatteryIcon, HomeIcon, ZapIcon, EuroIcon, CarIcon, LeafIcon, ClockIcon, CalendarIcon } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -20,6 +21,7 @@ import Tipo2 from "../public/img/Tipo2.png"
 import CCS from "../public/img/CCS.png"
 import CHAdeMO from "../public/img/CHAdeMO.png"
 import CarFinanceCalculator from './CarFinanceCalculator'
+
 
 const googleMapsApiKey = "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8";
 
@@ -256,20 +258,20 @@ export default function ElectricCarCalculator() {
                           onChange={(e) => setDailyDrivingDistance(Number(e.target.value))}
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label>Potencia de Carga (kW)</Label>
-                        <RadioGroup
-                          value={chargingPower.toString()}
-                          onValueChange={handleChargingPowerChange}
-                          className="flex flex-wrap gap-2"
-                        >
-                          {[2.2, 3.7, 7.4, 11, 22].map((power) => (
-                            <div key={power} className="flex items-center space-x-2">
-                              <RadioGroupItem value={power.toString()} id={`power-${power}`} />
-                              <Label htmlFor={`power-${power}`}>{power}</Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
+                      <div className="space-y-4">
+                        <Label>Potencia de Carga (kW): {chargingPower.toFixed(1)}</Label>
+                        <Slider
+                          min={4.0}
+                          max={22}
+                          step={0.1}
+                          value={[chargingPower]}
+                          onValueChange={handleChargingPowerChange as any}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>2.2 kW</span>
+                          <span>22 kW</span>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Switch
