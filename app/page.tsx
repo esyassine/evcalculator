@@ -181,7 +181,7 @@ export default function ElectricCarCalculator() {
             <TabsTrigger value="info" className="min-w-[120px] text-center">Información</TabsTrigger>
             {/* <TabsTrigger value="chargingPoints" className="min-w-[120px] text-center">Puntos de Recarga</TabsTrigger> */}
             <TabsTrigger value="conectores" className="min-w-[120px] text-center">Conectores</TabsTrigger>
-            <TabsTrigger value="financiacion" className="min-w-[120px] text-center">Financiación</TabsTrigger>
+            {/* <TabsTrigger value="financiacion" className="min-w-[120px] text-center">Financiación</TabsTrigger> */}
           </div>
           </TabsList>
             <br></br>
