@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { Battery, Home, Zap, EuroIcon, Car, Leaf, Clock, Calendar } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ThemeToggle } from "@/components/theme-toggle"
 import ConnectorInfo from './connector-info'
 
@@ -116,7 +116,7 @@ export default function Calculator() {
         <h1 className="text-3xl font-bold">Calculadora EV</h1>
       </div>
       
-      <Tabs defaultValue="calculator" className="space-y-4">
+      {/* <Tabs defaultValue="calculator" className="space-y-4">
         <TabsList className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-gray-400">
           <div className="flex space-x-4">
             <TabsTrigger value="calculator" className="min-w-[120px] text-center">Calculadora</TabsTrigger>
@@ -124,7 +124,7 @@ export default function Calculator() {
             <TabsTrigger value="conectores" className="min-w-[120px] text-center">Conectores</TabsTrigger>
           </div>
         </TabsList>
-        <TabsContent value="calculator">
+        <TabsContent value="calculator"> */}
           <Card>
             <CardHeader>
               <CardTitle>Parámetros del Vehículo Eléctrico</CardTitle>
@@ -247,29 +247,7 @@ export default function Calculator() {
               </CardContent>
             </Card>
           )}
-        </TabsContent>
-        
-        <TabsContent value="info">
-          <Card>
-            <CardHeader>
-              <CardTitle>Información Adicional</CardTitle>
-              <CardDescription>Detalles importantes sobre vehículos eléctricos</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <InfoSection title="Capacidad de la Batería (kWh)" content="Es la cantidad total de energía que la batería puede almacenar. Determina en gran medida la autonomía del vehículo. Las capacidades típicas varían entre 40 kWh para coches urbanos y más de 100 kWh para vehículos de alta gama." />
-              <InfoSection title="Potencia de Carga (kW)" content="Indica la velocidad a la que el coche puede recibir energía. Varía desde 2.2 kW en carga lenta doméstica hasta 22 kW en cargadores rápidos domésticos o públicos. Una mayor potencia de carga reduce el tiempo necesario para recargar la batería." />
-              <InfoSection title="Consumo Promedio (kWh/100km)" content="Mide la eficiencia energética del vehículo. Valores típicos oscilan entre 13-20 kWh/100km. Factores como el estilo de conducción, el clima y el uso de sistemas auxiliares pueden afectar este valor." />
-              <InfoSection title="Autonomía" content="Es la distancia que el coche puede recorrer con una carga completa. Depende de la capacidad de labatería y el consumo. Los rangos actuales varían desde 150 km en modelos urbanos hasta más de 600 km en vehículos de alta gama." />
-              <InfoSection title="Eficiencia de Carga" content="No toda la energía de la red llega a la batería debido a pérdidas en el proceso de carga. La eficiencia varía según el tipo de conector, siendo generalmente mayor en la carga lenta que en la rápida." />
-              <InfoSection title="Tipos de Conectores" content="Existen varios estándares: Tipo 2 (Mennekes) es común en Europa para carga lenta y semi-rápida, CCS para carga rápida en DC, CHAdeMO usado por algunos fabricantes asiáticos, y el conector propietario de Tesla. Cada uno tiene diferentes niveles de eficiencia." />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="conectores">
-          <ConnectorInfo />
-        </TabsContent>
-      </Tabs>
+       
     </div>
   )
 }
