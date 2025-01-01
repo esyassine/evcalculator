@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Script from 'next/script'
+import { useRouter } from 'next/navigation'
 
 interface CarListProps {
   cars: Car[]
@@ -25,9 +26,10 @@ const CarList: React.FC<CarListProps> = ({
   selectedCarsForComparison, 
   onToggleComparison 
 }) => {
+  const router = useRouter();
   return (
     <>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cars.map(car => (
           <Card 
             key={car.id} 
@@ -36,7 +38,7 @@ const CarList: React.FC<CarListProps> = ({
             <div className="relative">
               <div 
                 className="cursor-pointer"
-                onClick={() => onSelectCar(car)}
+                onClick={() => router.push(`/${car.id}`)}
               >
                 <Image 
                   src={car.imageUrl} 
@@ -80,7 +82,7 @@ const CarList: React.FC<CarListProps> = ({
             </div>
             <CardContent 
               className="p-4 cursor-pointer"
-              onClick={() => onSelectCar(car)}
+              onClick={() => router.push(`/${car.id}`)}
             >
               <h3 className="text-lg font-semibold mb-2 line-clamp-1 dark:text-white">{car.brand} {car.model}</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{car.bodyStyle} • {car.year}</p>
@@ -105,15 +107,15 @@ const CarList: React.FC<CarListProps> = ({
                 </div>
               </div>
             </CardContent>
-            {/* <CardFooter 
+            <CardFooter 
               className="bg-gray-50 dark:bg-gray-700 p-4 cursor-pointer"
-              onClick={() => onSelectCar(car)}
+              onClick={() => router.push(`/${car.id}`)}
             >
               <div className="w-full flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
                 <span title="Charging Time">Carga rápida: {car.chargingTime} min</span>
                 <span title="Towing Capacity">{car.towingCapacity} kg</span>
               </div>
-            </CardFooter> */}
+            </CardFooter>
           </Card>
         ))}
       </div>

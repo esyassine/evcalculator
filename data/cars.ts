@@ -16,7 +16,7 @@ export interface Car {
 
 export const cars: Car[] = [
   {
-    id: "1",
+    id: "tesla-model-3",
     brand: "Tesla",
     model: "Model 3",
     year: 2023,
@@ -31,7 +31,7 @@ export const cars: Car[] = [
     bodyStyle: "Sedan"
   },
   {
-    id: "2",
+    id: "chevrolet-bolt-ev",
     brand: "Chevrolet",
     model: "Bolt EV",
     year: 2023,
@@ -46,7 +46,7 @@ export const cars: Car[] = [
     bodyStyle: "Hatchback"
   },
   {
-    id: "3",
+    id: "nissan-leaf",
     brand: "Nissan",
     model: "Leaf",
     year: 2023,
@@ -61,7 +61,7 @@ export const cars: Car[] = [
     bodyStyle: "Hatchback"
   },
   {
-    id: "4",
+    id: "ford-mustang-mach-e",
     brand: "Ford",
     model: "Mustang Mach-E",
     year: 2023,
@@ -76,7 +76,7 @@ export const cars: Car[] = [
     bodyStyle: "SUV"
   },
   {
-    id: "5",
+    id: "volkswagen-id4",
     brand: "Volkswagen",
     model: "ID.4",
     year: 2023,
@@ -91,7 +91,7 @@ export const cars: Car[] = [
     bodyStyle: "SUV"
   },
   {
-    id: "6",
+    id: "hyundai-ioniq-5",
     brand: "Hyundai",
     model: "IONIQ 5",
     year: 2023,
@@ -106,7 +106,7 @@ export const cars: Car[] = [
     bodyStyle: "SUV"
   },
   {
-    id: "7",
+    id: "kia-ev6",
     brand: "Kia",
     model: "EV6",
     year: 2023,
@@ -121,7 +121,7 @@ export const cars: Car[] = [
     bodyStyle: "SUV"
   },
   {
-    id: "8",
+    id: "audi-e-tron-gt",
     brand: "Audi",
     model: "e-tron GT",
     year: 2023,
@@ -136,7 +136,7 @@ export const cars: Car[] = [
     bodyStyle: "Sedan"
   },
   {
-    id: "9",
+    id: "polestar-2",
     brand: "Polestar",
     model: "2",
     year: 2023,
@@ -151,7 +151,7 @@ export const cars: Car[] = [
     bodyStyle: "Hatchback"
   },
   {
-    id: "10",
+    id: "bmw-i4",
     brand: "BMW",
     model: "i4",
     year: 2023,
