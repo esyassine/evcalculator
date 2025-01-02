@@ -139,7 +139,9 @@ export default function HomePage() {
   }, [filters, searchTerm, sortOption, handleFilter])
 
   const handleCarSelect = (car: Car) => {
-    router.push(`/${car.id}`)
+    const brand = encodeURIComponent(car.brand.toLowerCase());
+    const model = encodeURIComponent(car.model.toLowerCase().replace(/\s+/g, '-'));
+    router.push(`/${brand}/${model}`);
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +263,12 @@ export default function HomePage() {
 
         <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
-           
+            <div className="mb-8 text-center">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Descubre tu Coche Eléctrico Ideal</h1>
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Explora nuestra selección de coches eléctricos y encuentra el que mejor se adapta a tus necesidades.
+              </p>
+            </div>
             <div className="mb-6 relative max-w-2xl mx-auto">
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className="relative flex-1">
@@ -291,6 +298,7 @@ export default function HomePage() {
                 <Menu className="h-5 w-5 mr-2" /> Filtros
               </Button>
             </div>
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Resultados de la Búsqueda</h2>
             {filteredCars.length > 0 ? (
               <>
                 <CarList 
@@ -324,4 +332,3 @@ export default function HomePage() {
     </div>
   )
 }
-

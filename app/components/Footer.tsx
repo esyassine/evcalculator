@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description Section */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center" title="Inicio">
               <Zap className="h-8 w-8 text-emerald-500" />
               <span className="text-2xl font-bold ml-2">ElectriCars</span>
             </Link>
@@ -38,22 +38,22 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/about" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Acerca de nosotros" rel="nofollow">
                   About us
                 </Link>
               </li>
               <li>
-                <Link href="/browse" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/browse" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Explorar coches eléctricos">
                   Classifieds
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/login" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Iniciar sesión" rel="nofollow">
                   Log in
                 </Link>
               </li>
               <li>
-                <Link href="/signup" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/signup" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Registrarse" rel="nofollow">
                   Sign up
                 </Link>
               </li>
@@ -65,17 +65,17 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/affiliates" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/affiliates" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Programa de afiliados" rel="nofollow">
                   Affiliates Program
                 </Link>
               </li>
               <li>
-                <Link href="/partners" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/partners" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Conviértete en socio" rel="nofollow">
                   Become a Partner
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500">
+                <Link href="/terms" className="text-gray-600 hover:text-emerald-600 dark:text-gray-400 dark:hover:text-emerald-500" title="Términos y condiciones" rel="nofollow">
                   Terms and Conditions
                 </Link>
               </li>
@@ -108,3 +108,4 @@ export default function Footer() {
     </footer>
   )
 }
+

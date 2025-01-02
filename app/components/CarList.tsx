@@ -29,7 +29,7 @@ const CarList: React.FC<CarListProps> = ({
   const router = useRouter();
   return (
     <>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cars.map(car => (
           <Card 
             key={car.id} 
@@ -39,6 +39,7 @@ const CarList: React.FC<CarListProps> = ({
               <div 
                 className="cursor-pointer"
                 onClick={() => router.push(`/${car.id}`)}
+                title={`Ver detalles de ${car.brand} ${car.model}`}
               >
                 <Image 
                   src={car.imageUrl} 
@@ -83,6 +84,7 @@ const CarList: React.FC<CarListProps> = ({
             <CardContent 
               className="p-4 cursor-pointer"
               onClick={() => router.push(`/${car.id}`)}
+              title={`Ver detalles de ${car.brand} ${car.model}`}
             >
               <h3 className="text-lg font-semibold mb-2 line-clamp-1 dark:text-white">{car.brand} {car.model}</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{car.bodyStyle} • {car.year}</p>
@@ -110,6 +112,7 @@ const CarList: React.FC<CarListProps> = ({
             <CardFooter 
               className="bg-gray-50 dark:bg-gray-700 p-4 cursor-pointer"
               onClick={() => router.push(`/${car.id}`)}
+              title={`Ver detalles de ${car.brand} ${car.model}`}
             >
               <div className="w-full flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
                 <span title="Charging Time">Carga rápida: {car.chargingTime} min</span>

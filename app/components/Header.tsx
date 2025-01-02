@@ -37,7 +37,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex-shrink-0 flex items-center" title="Inicio">
               <Zap className="h-8 w-8 text-emerald-500" />
               <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">ElectriCars</span>
             </Link>
@@ -52,15 +52,19 @@ const Header = () => {
                     ? 'border-emerald-500 text-gray-900 dark:text-white'
                     : 'border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
+                title={item.name}
+                rel="nofollow"
               >
                 {item.name}
               </Link>
             ))}
           </nav>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-            <Button variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-600 dark:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900">
-              Iniciar sesión
-            </Button>
+            <Link href="/login" passHref>
+              <Button variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-600 dark:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900" title="Iniciar sesión">
+                Iniciar sesión
+              </Button>
+            </Link>
             {mounted && (
               <Button
                 variant="ghost"
@@ -108,9 +112,11 @@ const Header = () => {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuItem>
-                  <Button variant="ghost" className="w-full justify-start">
-                    Iniciar sesión
-                  </Button>
+                  <Link href="/login" passHref>
+                    <Button variant="ghost" className="w-full justify-start" title="Iniciar sesión">
+                      Iniciar sesión
+                    </Button>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -122,3 +128,4 @@ const Header = () => {
 }
 
 export default Header
+

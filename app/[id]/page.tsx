@@ -74,6 +74,11 @@ export default function CarDetailPage() {
         <div>
           <h1 className="text-3xl font-bold mb-2">{car.brand} {car.model}</h1>
           <p className="text-xl text-gray-600 mb-4">{car.year} {car.bodyStyle}</p>
+          <div className="flex space-x-2">
+            <Badge>{car.segment}</Badge>
+            <Badge variant="outline">{car.bodyStyle}</Badge>
+          </div>
+          <h2 className="text-2xl font-semibold mb-4">Especificaciones</h2>
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="flex items-center">
               <Battery className="mr-2 text-emerald-500" />
@@ -104,13 +109,28 @@ export default function CarDetailPage() {
             <h2 className="text-2xl font-semibold mb-2">Precio</h2>
             <p className="text-3xl font-bold text-emerald-600">{car.price.toLocaleString()}€</p>
           </div>
+          <Card>
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-semibold mb-4">Descripción</h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  El {car.brand} {car.model} del {car.year} es un vehículo eléctrico impresionante que combina 
+                  rendimiento, eficiencia y estilo. Con una autonomía de {car.range} km y una aceleración de 
+                  0 a 100 km/h en solo {car.acceleration} segundos, este coche ofrece una experiencia de 
+                  conducción emocionante y respetuosa con el medio ambiente.
+                </p>
+                <Separator className="my-4" />
+                <p className="text-gray-600 dark:text-gray-300">
+                  Su batería de {car.batteryCapacity} kWh se puede cargar rápidamente en solo {car.chargingTime} minutos, 
+                  lo que lo hace ideal para viajes largos. Con una velocidad máxima de {car.topSpeed} km/h, 
+                  este {car.bodyStyle} del segmento {car.segment} es perfecto para aquellos que buscan un 
+                  vehículo eléctrico sin comprometer el rendimiento o el confort.
+                </p>
+              </CardContent>
+            </Card>
           <Button onClick={handleSimulateClick} className="w-full mb-4">
             <Calculator className="mr-2 h-5 w-5" /> Simular costes
           </Button>
-          <div className="flex space-x-2">
-            <Badge>{car.segment}</Badge>
-            <Badge variant="outline">{car.bodyStyle}</Badge>
-          </div>
+        
         </div>
       </div>
     </div>
